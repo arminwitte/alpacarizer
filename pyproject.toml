@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "alpacarizer"
+version = "0.1.0"
+authors = [
+    {name = "Armin Witte", email = "your.email@example.com"},
+]
+description = "A Streamlit app to generate instruction-response pairs for language model fine-tuning"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "streamlit>=1.24.0",
+    "httpx>=0.24.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/arminwitte/alpacarizer"
+"Bug Tracker" = "https://github.com/arminwitte/alpacarizer/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["alpacarizer"]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "pytest --cov-report=term-missing --cov=alpacarizer {args:tests}"
+cov-report = ["- coverage report"]
+cov = ["test-cov", "cov-report"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
