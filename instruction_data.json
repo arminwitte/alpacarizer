@@ -2,5 +2,125 @@
   {
     "instruction": "What was the primary energy consumption in the world in 2014, according to the provided text?",
     "response": "In 2014, the supplied primary energy for the whole world was 13699 million tons of oil equivalent (Mtoe) which amounts to 159319 TWh."
+  },
+  {
+    "instruction": "Summarize the following text in one sentence:",
+    "input": "Energy conversion is one of the most important factors in the history of humankind, with fossil fuels dominating global energy supply and causing environmental problems, prompting a need for more efficient and environmentally sound energy systems.",
+    "output": "The dominance of fossil fuels in energy production leads to environmental issues, necessitating a shift towards more efficient and sustainable energy sources."
+  },
+  {
+    "instruction": "Summarize the following text: Energy conversion is one of themost important factors in the history of humankind. Fire, which is the conversion of some type of fuel to chemical products, light, and heat by oxidation, was harnessed even in prehistoric times. Later, more sources of primary energy\u2014natural sources of energy\u2014were used and converted into mechanical energy, e.g. in windmills, water wheels for gristmills, and trip hammers. The industrial revolution, starting in the second half of the 18th century, was made possible by the increasing use of steam power with coal as the primary energy source.",
+    "input": "Energy conversion is one of themost important factors in the history of humankind. Fire, which is the conversion of some type of fuel to chemical products, light, and heat by oxidation, was harnessed even in prehistoric times. Later, more sources of primary energy\u2014natural sources of energy\u2014were used and converted into mechanical energy, e.g. in windmills, water wheels for gristmills, and trip hammers. The industrial revolution, starting in the second half of the 18th century, was made possible by the increasing use of steam power with coal as the primary energy source.",
+    "output": "Energy conversion, starting with fire and evolving through mechanical and steam power, has been crucial to human history and the Industrial Revolution."
+  },
+  {
+    "instruction": "Extract 3-5 main keywords or key phrases from the following text: The use of carbon (coal) or hydrocarbons (oil and natural gas) as energy source bears\u2014among others\u2014two main problems: During the combustion process nitrous oxides (NOx) and carbon dioxide (CO2) are generated in considerable amounts. NOx is associated with negative consequences for the health of humans (WHO Regional Office for Europe, 2003) and is a precursor for other pollutants such as acid rain. CO2 plays amajor role in the greenhouse effect determining earth\u2019s surface temperature (Rodhe, 1990; Lacis et al., 2010).",
+    "input": "The use of carbon (coal) or hydrocarbons (oil and natural gas) as energy source bears\u2014among others\u2014two main problems: During the combustion process nitrous oxides (NOx) and carbon dioxide (CO2) are generated in considerable amounts. NOx is associated with negative consequences for the health of humans (WHO Regional Office for Europe, 2003) and is a precursor for other pollutants such as acid rain. CO2 plays amajor role in the greenhouse effect determining earth\u2019s surface temperature (Rodhe, 1990; Lacis et al., 2010).",
+    "output": "Carbon emissions, Nitrous oxides (NOx), Carbon dioxide (CO2), Greenhouse effect, Air pollution"
+  },
+  {
+    "instruction": "Provide a concise one-sentence summary of the following text:",
+    "input": "Energy conversion is one of the most important factors in the history of humankind. Fire, which is the conversion of some type of fuel to chemical products, light, and heat by oxidation, was harnessed even in prehistoric times. Later, more sources of primary energy\u2014natural sources of energy\u2014were used and converted into mechanical energy, e.g. in windmills, water wheels for gristmills, and trip hammers. The industrial revolution, starting in the second half of the 18th century, was made possible by the increasing use of steam power with coal as the primary energy source. From an engineering perspective, the conversion of energy from one form to another is one of the main tasks. Energy is needed for electricity, heat, transportation, and the manufacturing of goods. In 2014, the supplied primary energy for the whole world was 13699 million tons of oil equivalent (Mtoe) which amounts to 159319 TWh (International Energy Agency, 2016). Oil, coal, and natural gas, all of which are fossil fuels, made up more than 80% of all fuel shares (International Energy Agency, 2016). A total of 108043 TWhwas consumed in 2014, 29.4%ofwhich by industry and 28.3% by transportation. A share of 8.9% of the consumed primary energy was put to non-energy use, e.g. chemical products (International Energy Agency, 2017). The total generation of electricity and heat in power stations was 23816 TWh (International Energy Agency, 2016) and 3815 TWh, respectively (International Energy Agency, 2017). With losses of 32203 TWh, this leads to an overall efficiency for the conversion of primary energy to electricity and heat of 46.2 %. The use of carbon (coal) or hydrocarbons (oil and natural gas) as energy source bears\u2014among others\u2014two main problems: During the combustion process nitrous oxides (NOx) and carbon dioxide (CO2) are generated in considerable amounts. NOx is associated with negative consequences for the health of humans (WHO Regional Office for Europe, 2003) and is a precursor for other pollutants such as acid rain. CO2 plays amajor role in the greenhouse effect determining earth\u2019s surface temperature (Rodhe, 1990; Lacis et al., 2010). The anthropogenic greenhouse effect is caused to 60% by the man-made emission of CO2 (Rodhe, 1990). In the last 200 years, the concentration of CO2 in the atmosphere rose from about 280 1 1 Introduction parts per million (ppm) to over 400 ppm (Houghton and Intergovernmental Panel on Climate Change, 2001). CO2 is besides water one of the main products of the combustion process and can only be reduced by increasing efficiency. To counteract the negative effect of the energy sector on the environment, the United Nations Summit in Brasil 1992 published objectives for the \u201cenergy development, efficiency and consumption\u201d in the \u201cAgenda 21\u201d United Nations (1994): The basic and ultimate objective of this programme area is to reduce adverse effects on the atmosphere from the energy sector by promoting policies or programmes, as appropriate, to increase the contribution of environmentally sound and cost-effective energy systems, particularly new and renewable ones, through less polluting and more efficient energy production, transmission, distribution and use. This objective should reflect the need for equity, adequate energy supplies and increasing energy consumption in developing countries, [. . . ], and the situations of countries highly vulnerable to adverse effects of climate change. This paragraph emphasizes the need for more efficient energy production and new energy systems. Both goals can only be achieved through research on existing machinery and principles as well as on new approaches.",
+    "output": "Energy conversion has been vital throughout history, but current reliance on fossil fuels generates pollution and necessitates a shift towards more efficient and renewable energy systems to mitigate environmental damage."
+  },
+  {
+    "instruction": "Extract 3-5 main keywords or key phrases from the following text:",
+    "input": "Energy conversion is one of the most important factors in the history of humankind. Fire, which is the conversion of some type of fuel to chemical products, light, and heat by oxidation, was harnessed even in prehistoric times. Later, more sources of primary energy\u2014natural sources of energy\u2014were used and converted into mechanical energy, e.g. in windmills, water wheels for gristmills, and trip hammers. The industrial revolution, starting in the second half of the 18th century, was made possible by the increasing use of steam power with coal as the primary energy source. From an engineering perspective, the conversion of energy from one form to another is one of the main tasks. Energy is needed for electricity, heat, transportation, and the manufacturing of goods. In 2014, the supplied primary energy for the whole world was 13699 million tons of oil equivalent (Mtoe) which amounts to 159319 TWh (International Energy Agency, 2016). Oil, coal, and natural gas, all of which are fossil fuels, made up more than 80% of all fuel shares (International Energy Agency, 2016). A total of 108043 TWhwas consumed in 2014, 29.4%ofwhich by industry and 28.3% by transportation. A share of 8.9% of the consumed primary energy was put to non-energy use, e.g. chemical products (International Energy Agency, 2017). The total generation of electricity and heat in power stations was 23816 TWh (International Energy Agency, 2016) and 3815 TWh, respectively (International Energy Agency, 2017). With losses of 32203 TWh, this leads to an overall efficiency for the conversion of primary energy to electricity and heat of 46.2 %. The use of carbon (coal) or hydrocarbons (oil and natural gas) as energy source bears\u2014among others\u2014two main problems: During the combustion process nitrous oxides (NOx) and carbon dioxide (CO2) are generated in considerable amounts. NOx is associated with negative consequences for the health of humans (WHO Regional Office for Europe, 2003) and is a precursor for other pollutants such as acid rain. CO2 plays amajor role in the greenhouse effect determining earth\u2019s surface temperature (Rodhe, 1990; Lacis et al., 2010). The anthropogenic greenhouse effect is caused to 60% by the man-made emission of CO2 (Rodhe, 1990). In the last 200 years, the concentration of CO2 in the atmosphere rose from about 280 1 1 Introduction parts per million (ppm) to over 400 ppm (Houghton and Intergovernmental Panel on Climate Change, 2001). CO2 is besides water one of the main products of the combustion process and can only be reduced by increasing efficiency. To counteract the negative effect of the energy sector on the environment, the United Nations Summit in Brasil 1992 published objectives for the \u201cenergy development, efficiency and consumption\u201d in the \u201cAgenda 21\u201d United Nations (1994): The basic and ultimate objective of this programme area is to reduce adverse effects on the atmosphere from the energy sector by promoting policies or programmes, as appropriate, to increase the contribution of environmentally sound and cost-effective energy systems, particularly new and renewable ones, through less polluting and more efficient energy production, transmission, distribution and use. This objective should reflect the need for equity, adequate energy supplies and increasing energy consumption in developing countries, [. . . ], and the situations of countries highly vulnerable to adverse effects of climate change. This paragraph emphasizes the need for more efficient energy production and new energy systems. Both goals can only be achieved through research on existing machinery and principles as well as on new approaches.",
+    "output": "Energy conversion, Fossil fuels, CO2 emissions, Renewable energy, Energy efficiency"
+  },
+  {
+    "instruction": "Generate a short, engaging title for the following text:",
+    "input": "Energy conversion is one of the most important factors in the history of humankind. Fire, which is the conversion of some type of fuel to chemical products, light, and heat by oxidation, was harnessed even in prehistoric times. Later, more sources of primary energy\u2014natural sources of energy\u2014were used and converted into mechanical energy, e.g. in windmills, water wheels for gristmills, and trip hammers. The industrial revolution, starting in the second half of the 18th century, was made possible by the increasing use of steam power with coal as the primary energy source. From an engineering perspective, the conversion of energy from one form to another is one of the main tasks. Energy is needed for electricity, heat, transportation, and the manufacturing of goods. In 2014, the supplied primary energy for the whole world was 13699 million tons of oil equivalent (Mtoe) which amounts to 159319 TWh (International Energy Agency, 2016). Oil, coal, and natural gas, all of which are fossil fuels, made up more than 80% of all fuel shares (International Energy Agency, 2016). A total of 108043 TWhwas consumed in 2014, 29.4%ofwhich by industry and 28.3% by transportation. A share of 8.9% of the consumed primary energy was put to non-energy use, e.g. chemical products (International Energy Agency, 2017). The total generation of electricity and heat in power stations was 23816 TWh (International Energy Agency, 2016) and 3815 TWh, respectively (International Energy Agency, 2017). With losses of 32203 TWh, this leads to an overall efficiency for the conversion of primary energy to electricity and heat of 46.2 %. The use of carbon (coal) or hydrocarbons (oil and natural gas) as energy source bears\u2014among others\u2014two main problems: During the combustion process nitrous oxides (NOx) and carbon dioxide (CO2) are generated in considerable amounts. NOx is associated with negative consequences for the health of humans (WHO Regional Office for Europe, 2003) and is a precursor for other pollutants such as acid rain. CO2 plays amajor role in the greenhouse effect determining earth\u2019s surface temperature (Rodhe, 1990; Lacis et al., 2010). The anthropogenic greenhouse effect is caused to 60% by the man-made emission of CO2 (Rodhe, 1990). In the last 200 years, the concentration of CO2 in the atmosphere rose from about 280 1 1 Introduction parts per million (ppm) to over 400 ppm (Houghton and Intergovernmental Panel on Climate Change, 2001). CO2 is besides water one of the main products of the combustion process and can only be reduced by increasing efficiency. To counteract the negative effect of the energy sector on the environment, the United Nations Summit in Brasil 1992 published objectives for the \u201cenergy development, efficiency and consumption\u201d in the \u201cAgenda 21\u201d United Nations (1994): The basic and ultimate objective of this programme area is to reduce adverse effects on the atmosphere from the energy sector by promoting policies or programmes, as appropriate, to increase the contribution of environmentally sound and cost-effective energy systems, particularly new and renewable ones, through less polluting and more efficient energy production, transmission, distribution and use. This objective should reflect the need for equity, adequate energy supplies and increasing energy consumption in developing countries, [. . . ], and the situations of countries highly vulnerable to adverse effects of climate change. This paragraph emphasizes the need for more efficient energy production and new energy systems. Both goals can only be achieved through research on existing machinery and principles as well as on new approaches.",
+    "output": "Energy's Crossroads: Efficiency, Environment, and the Future"
+  },
+  {
+    "instruction": "Analyze the sentiment of the following text. Classify it as positive, negative, or neutral, and briefly explain your reasoning:",
+    "input": "The use of carbon (coal) or hydrocarbons (oil and natural gas) as energy source bears\u2014among others\u2014two main problems: During the combustion process nitrous oxides (NOx) and carbon dioxide (CO2) are generated in considerable amounts. NOx is associated with negative consequences for the health of humans (WHO Regional Office for Europe, 2003) and is a precursor for other pollutants such as acid rain. CO2 plays amajor role in the greenhouse effect determining earth\u2019s surface temperature (Rodhe, 1990; Lacis et al., 2010). The anthropogenic greenhouse effect is caused to 60% by the man-made emission of CO2 (Rodhe, 1990).",
+    "output": "Negative. The text highlights the problems associated with using carbon-based energy sources, specifically focusing on the negative impacts of NOx and CO2 emissions on human health and the environment."
+  },
+  {
+    "instruction": "Rewrite the following text in your own words, maintaining its core meaning:",
+    "input": "To counteract the negative effect of the energy sector on the environment, the United Nations Summit in Brasil 1992 published objectives for the \u201cenergy development, efficiency and consumption\u201d in the \u201cAgenda 21\u201d United Nations (1994): The basic and ultimate objective of this programme area is to reduce adverse effects on the atmosphere from the energy sector by promoting policies or programmes, as appropriate, to increase the contribution of environmentally sound and cost-effective energy systems, particularly new and renewable ones, through less polluting and more efficient energy production, transmission, distribution and use.",
+    "output": "In response to the energy sector's harmful environmental effects, the 1992 United Nations Summit in Brazil established goals within Agenda 21 to lessen atmospheric damage by promoting cleaner, more efficient, and affordable energy solutions, emphasizing new and renewable sources."
+  },
+  {
+    "instruction": "What were some early examples of converting primary energy into mechanical energy?",
+    "input": "",
+    "output": "Early examples of converting primary energy into mechanical energy include windmills, water wheels for gristmills, and trip hammers."
+  },
+  {
+    "instruction": "What are the two main problems associated with using carbon and hydrocarbons as energy sources?",
+    "input": "",
+    "output": "The two main problems are the generation of nitrous oxides (NOx) and carbon dioxide (CO2) during the combustion process. NOx is harmful to human health and a precursor for pollutants like acid rain, while CO2 contributes significantly to the greenhouse effect."
+  },
+  {
+    "instruction": "What was the total amount of primary energy consumed globally in 2014, and what percentage was used by industry and transportation?",
+    "input": "",
+    "output": "In 2014, the total primary energy consumed globally was 108043 TWh, with 29.4% used by industry and 28.3% by transportation."
+  },
+  {
+    "instruction": "According to the text, what percentage of the anthropogenic greenhouse effect is caused by man-made CO2 emissions?",
+    "input": "",
+    "output": "According to the text, 60% of the anthropogenic greenhouse effect is caused by man-made CO2 emissions."
+  },
+  {
+    "instruction": "According to the text, what percentage of the anthropogenic greenhouse effect is caused by man-made CO2 emissions?",
+    "input": "",
+    "output": "According to the text, 60% of the anthropogenic greenhouse effect is caused by man-made CO2 emissions."
+  },
+  {
+    "instruction": "What was the objective published by the United Nations Summit in Brasil 1992 regarding energy?",
+    "input": "",
+    "output": "The objective was to reduce adverse effects on the atmosphere from the energy sector by promoting policies and programs to increase the contribution of environmentally sound and cost-effective energy systems, particularly new and renewable ones, through less polluting and more efficient energy production, transmission, distribution, and use."
+  },
+  {
+    "instruction": "Extract 3-5 main keywords or key phrases from the following text:",
+    "input": "Gas turbines have a severe impact on the environment. A portion of 21.6% of the total electricity was produced from natural gas and mostly in gas turbines.",
+    "output": "Gas turbines, environmental impact, natural gas, electricity production."
+  },
+  {
+    "instruction": "Extract 3-5 main keywords or key phrases from the following text:",
+    "input": "In gas turbines, lean premixed combustion, while reducing emissions, is prone to thermoacoustic instabilities. These instabilities, characterized by amplified pressure and velocity fluctuations, negatively impact efficiency and lifespan. Addressing these issues can improve the environmental impact of gas turbines by reducing carbon dioxide emissions and allowing for more flexible energy generation through turndown.",
+    "output": "Thermoacoustic instabilities, Gas turbines, Lean premixed combustion, Efficiency, Environmental impact"
+  },
+  {
+    "instruction": "Generate a short, engaging title for the following text:",
+    "input": "Thermoacoustic engines and refrigerators offer a simple and robust design based on resonator tubes and heat exchangers. These devices utilize temperature gradients to convert between thermal and acoustic energy. While promising, a significant challenge remains in improving their overall efficiency to make them commercially viable.",
+    "output": "Thermoacoustics: Simple Design, Efficiency Challenge"
+  },
+  {
+    "instruction": "Analyze the sentiment of the following text. Classify it as positive, negative, or neutral, and briefly explain your reasoning:",
+    "input": "Domestic boilers are also prone to thermoacoustic instabilities, similar to gas turbines. Large pulsations can be harmful to the device and impede efficiency. The heat exchanger within the boiler also influences the thermoacoustic stability, with the time lag between heat transfer and pressure oscillations playing a critical role in dampening or exciting fluctuations.",
+    "output": "Negative. The text discusses the harmful effects of thermoacoustic instabilities on domestic boilers, including reduced efficiency and potential damage to the device."
+  },
+  {
+    "instruction": "Rewrite the following text in your own words, maintaining its core meaning:",
+    "input": "Rayleigh (1896) provided a strong theoretical basis for thermoacoustics. He understood that the key factor was how heat transfers between a flame or heated wire and the fluid within the tube. At the time, these researchers could not have imagined how significant their findings would become for modern energy systems.",
+    "output": "Rayleigh established the theoretical foundation of thermoacoustics by recognizing that the dynamics of heat exchange between a heat source and the fluid in a tube are crucial. The original discoverers of this effect likely did not foresee the future importance of their research for today's energy technologies."
+  },
+  {
+    "instruction": "What is thermoacoustics and who are some of the pioneers in this field, according to the provided text?",
+    "input": "",
+    "output": "Thermoacoustics describes the conversion between thermal and acoustic energy. Early pioneers in the field include Higgins (1802), Rijke (1859), and Rayleigh (1896)."
+  },
+  {
+    "instruction": "Describe how thermoacoustic instabilities can negatively impact gas turbines, according to the provided text.",
+    "input": "",
+    "output": "Thermoacoustic instabilities in gas turbines amplify pressure and fluid velocity fluctuations, which negatively impact efficiency and the life cycle of the gas turbine. This can also limit operational flexibility."
+  },
+  {
+    "instruction": "How can the thermoacoustic effect be harnessed, according to the provided text?",
+    "input": "",
+    "output": "The thermoacoustic effect can be harnessed in devices like thermoacoustic engines and thermoacoustic refrigerators. These devices utilize temperature gradients created by heat exchangers at a stack or regenerator to convert thermal energy into acoustic energy, which can then be used for cooling or other purposes."
+  },
+  {
+    "instruction": "According to the provided text, what is the role of the heat exchanger in domestic boilers regarding thermoacoustic stability?",
+    "input": "",
+    "output": "In domestic boilers, the heat exchanger can influence thermoacoustic stability. The heat transfer between the hot flue gas and the heat exchanger tubes can either dampen or drive pressure oscillations, depending on the time lag between heat transfer and pressure oscillation."
+  },
+  {
+    "instruction": "What are the potential benefits of improving the efficiency and flexibility of gas turbines, according to the text?",
+    "input": "",
+    "output": "Increasing the efficiency and flexibility of gas turbines for power generation would positively affect their environmental impact, potentially reducing carbon dioxide (CO2) emissions."
   }
 ]

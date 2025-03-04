@@ -3,6 +3,7 @@ import json
 import os
 from google import genai
 from typing import List, Dict, Any
+import time
 
 # Configure page settings
 st.set_page_config(page_title="Instruction Tuple Generator", layout="wide")
@@ -25,25 +26,11 @@ if 'saved_data' not in st.session_state:
     else:
         st.session_state.saved_data = []
 
-# Function to generate instruction-response tuples using Gemini API
-def generate_candidates(text: str, api_key: str) -> List[Dict[str, str]]:
+def generator_call(prompt: str, api_key: str) -> List[Dict[str, str]]:
     try:
         # Initialize the Gemini client
         client = genai.Client(api_key=api_key)
-        
-        # Construct the prompt
-        prompt = f"""
-        Based on the following text:
-        
-        {text}
-        
-        Generate 10 instruction-response tuples in the style of the Alpaca dataset for fine-tuning language models.
-        Each tuple should contain an instruction related to the text and a corresponding response.
-        Format the output as a JSON array with objects containing 'instruction' and 'response' keys.
-        Do not include any explanation or conversation, just return valid JSON that can be parsed.
-        """
-        
-        # Generate content with Gemini
+    # Generate content with Gemini
         response = client.models.generate_content(
             model="gemini-2.0-flash",
             contents=prompt,
@@ -67,6 +54,54 @@ def generate_candidates(text: str, api_key: str) -> List[Dict[str, str]]:
         st.error(f"Error generating candidates: {str(e)}")
         return []
 
+# Function to generate instruction-input-output tuples using Gemini API
+def generate_candidates_input(text: str, api_key: str) -> List[Dict[str, str]]:
+        
+    # Construct the prompt
+    prompt = f"""
+    Based on the following text:
+    
+    {text}
+    
+    Generate 5 instruction-input-output tuples in the style of the Alpaca dataset for fine-tuning language models.
+    Each tuple should contain an istruction of the following instructions categories
+    - summarize, e.g., Provide a concise one-sentence summary of the following text:
+    - keyword, e.g., Extract 3-5 main keywords or key phrases from the following text:
+    - title, e.g., Generate a short, engaging title for the following text:
+    - sentiment, e.g., Analyze the sentiment of the following text. Classify it as positive, negative, or neutral, and briefly explain your reasoning:
+    - paraphrase, e.g., Rewrite the following text in your own words, maintaining its core meaning:
+    the input text for the instruction, and the corresponding response.
+    The input should be between 64 and 512 tokens long.
+    Format the output as a JSON array with objects containing 'instruction', 'input', and 'output' keys.
+    Do not include any explanation or conversation, just return valid JSON that can be parsed.
+    """
+    
+    return generator_call(prompt, api_key)
+
+# Function to generate instruction-input-output tuples using Gemini API
+def generate_candidates_questions(text: str, api_key: str) -> List[Dict[str, str]]:
+        
+    # Construct the prompt
+    prompt = f"""
+    Based on the following text:
+    
+    {text}
+    
+    Generate 5 instruction-output tuples in the style of the Alpaca dataset for fine-tuning language models.
+    Each tuple should contain a question as the instruction and the corresponding response as the output.
+    Format the output as a JSON array with objects containing 'instruction', 'output' keys.
+    Do not include any explanation or conversation, just return valid JSON that can be parsed.
+    """
+    
+    return generator_call(prompt, api_key)
+
+# Function to generate instruction-input-output tuples using Gemini API
+def generate_candidates(text: str, api_key: str) -> List[Dict[str, str]]:
+    inputs = generate_candidates_input(text, api_key)
+    time.sleep(1) # Sleep for a second to avoid rate limiting
+    questions = generate_candidates_questions(text, api_key)
+    return inputs + questions
+
 # Function to save current candidate to file
 def save_current_candidate():
     if not st.session_state.candidates:
@@ -76,7 +111,8 @@ def save_current_candidate():
     # Get the current candidate with any edits
     current_candidate = {
         "instruction": st.session_state.current_instruction,
-        "response": st.session_state.current_response
+        "input": st.session_state.current_input,
+        "output": st.session_state.current_output
     }
     
     # Append to saved data
@@ -107,18 +143,18 @@ col1, col2 = st.columns([2, 1])
 with col1:
     st.subheader("Input Text")
     input_text = st.text_area(
-        "Enter the text context for generating instruction-response tuples:",
+        "Enter the text context for generating instruction-input-output tuples:",
         height=300
     )
 
     # Generate button
-    if st.button("Generate Instruction-Response Tuples"):
+    if st.button("Generate instruction-input-output Tuples"):
         if not api_key:
             st.error("Please enter your Gemini API Key.")
         elif not input_text:
             st.error("Please enter some text to generate tuples from.")
         else:
-            with st.spinner("Generating instruction-response tuples..."):
+            with st.spinner("Generating instruction-input-output tuples..."):
                 candidates = generate_candidates(input_text, api_key)
                 if candidates:
                     st.session_state.candidates = candidates
@@ -126,10 +162,11 @@ with col1:
                     # Initialize the first candidate in the text areas
                     if len(candidates) > 0:
                         st.session_state.current_instruction = candidates[0].get("instruction", "")
-                        st.session_state.current_response = candidates[0].get("response", "")
-                    st.success(f"Generated {len(candidates)} instruction-response tuples.")
+                        st.session_state.current_input = candidates[0].get("input", "")
+                        st.session_state.current_output = candidates[0].get("output", "")
+                    st.success(f"Generated {len(candidates)} instruction-input-output tuples.")
                 else:
-                    st.error("Failed to generate valid instruction-response tuples.")
+                    st.error("Failed to generate valid instruction-input-output tuples.")
 
 with col2:
     st.subheader("Statistics")
@@ -146,7 +183,7 @@ st.subheader("Candidate Viewer and Editor")
 
 if st.session_state.candidates:
     # Navigation controls
-    col1, col2, col3 = st.columns([1, 2, 1])
+    col1, col2, col3, col4 = st.columns([1, 2, 1, 1])
     
     with col1:
         if st.button("Previous"):
@@ -168,6 +205,11 @@ if st.session_state.candidates:
         if st.button("Next"):
             if st.session_state.current_index < len(st.session_state.candidates) - 1:
                 st.session_state.current_index += 1
+
+    with col4:
+        # Save button
+        if st.button("Save Current Candidate"):
+            save_current_candidate()
     
     # Display and edit current candidate
     if 0 <= st.session_state.current_index < len(st.session_state.candidates):
@@ -176,13 +218,16 @@ if st.session_state.candidates:
         # Initialize session state variables for the text areas if not present
         if 'current_instruction' not in st.session_state:
             st.session_state.current_instruction = candidate.get("instruction", "")
-        if 'current_response' not in st.session_state:
-            st.session_state.current_response = candidate.get("response", "")
+        if 'current_input' not in st.session_state:
+            st.session_state.current_input = candidate.get("input", "")
+        if 'current_output' not in st.session_state:
+            st.session_state.current_output = candidate.get("output", "")
         
         # Update text areas when index changes
         if st.session_state.current_index != getattr(st, 'last_index', None):
             st.session_state.current_instruction = candidate.get("instruction", "")
-            st.session_state.current_response = candidate.get("response", "")
+            st.session_state.current_input = candidate.get("input", "")
+            st.session_state.current_output = candidate.get("output", "")
             setattr(st, 'last_index', st.session_state.current_index)
         
         # Editable text areas
@@ -194,17 +239,20 @@ if st.session_state.candidates:
         )
         
         st.text_area(
-            "Response:",
-            value=st.session_state.current_response,
-            height=250,
-            key="response_editor"
+            "Input:",
+            value=st.session_state.current_input,
+            height=150,
+            key="input_editor"
         )
         
-        # Save button
-        if st.button("Save Current Candidate"):
-            save_current_candidate()
+        st.text_area(
+            "Output:",
+            value=st.session_state.current_output,
+            height=150,
+            key="output_editor"
+        )
 else:
-    st.info("Generate instruction-response tuples to view and edit candidates.")
+    st.info("Generate instruction-input-output tuples to view and edit candidates.")
 
 # Show saved data
 if st.session_state.saved_data:
