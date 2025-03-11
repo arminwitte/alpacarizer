@@ -89,6 +89,8 @@ def generate_candidates_questions(text: str, api_key: str) -> List[Dict[str, str
     
     Generate 5 instruction-output tuples in the style of the Alpaca dataset for fine-tuning language models.
     Each tuple should contain a question as the instruction and the corresponding response as the output.
+    The question must be self-contained without referencing the text (e.g "according to the text") and should not require additional context to be answered.
+    The output should be a complete and concise answer to the question.
     Format the output as a JSON array with objects containing 'instruction', 'output' keys.
     Do not include any explanation or conversation, just return valid JSON that can be parsed.
     """
@@ -108,12 +110,20 @@ def save_current_candidate():
         st.warning("No candidates to save.")
         return
     
-    # Get the current candidate with any edits
+    # Get the current candidate without any edits
     current_candidate = {
         "instruction": st.session_state.current_instruction,
         "input": st.session_state.current_input,
         "output": st.session_state.current_output
     }
+
+    # overwrite with edits
+    if "instruction_editor" in st.session_state:
+        current_candidate["instruction"] = st.session_state.instruction_editor
+    if "input_editor" in st.session_state:
+        current_candidate["input"] = st.session_state.input_editor
+    if "output_editor" in st.session_state:
+        current_candidate["output"] = st.session_state.output_editor
     
     # Append to saved data
     st.session_state.saved_data.append(current_candidate)
@@ -178,81 +188,91 @@ with col2:
     else:
         st.write("Output file will be created upon saving.")
 
+# Save all candidates button
+if st.button("Save All Candidates",use_container_width=True):
+    for candidate in st.session_state.candidates:
+        st.session_state.saved_data.append(candidate)
+    try:
+        with open(st.session_state.output_file, 'w') as f:
+            json.dump(st.session_state.saved_data, f, indent=2)
+        st.success(f"Saved all candidates to {st.session_state.output_file}")
+    except Exception as e:
+        st.error(f"Error saving to file: {str(e)}")
+
 # Candidate viewer and editor
 st.subheader("Candidate Viewer and Editor")
 
-if st.session_state.candidates:
-    # Navigation controls
-    col1, col2, col3, col4 = st.columns([1, 2, 1, 1])
-    
-    with col1:
-        if st.button("Previous"):
-            if st.session_state.current_index > 0:
-                st.session_state.current_index -= 1
-    
-    with col2:
-        current_idx = st.slider(
-            "Navigate candidates:", 
-            min_value=0, 
-            max_value=len(st.session_state.candidates)-1, 
-            value=st.session_state.current_index,
-            key="candidate_slider"
-        )
-        if current_idx != st.session_state.current_index:
-            st.session_state.current_index = current_idx
-    
-    with col3:
-        if st.button("Next"):
-            if st.session_state.current_index < len(st.session_state.candidates) - 1:
-                st.session_state.current_index += 1
+# Navigation controls
+col1, col2, col3, col4 = st.columns([1, 2, 1, 1])
 
-    with col4:
-        # Save button
-        if st.button("Save Current Candidate"):
-            save_current_candidate()
+with col1:
+    if st.button("Previous"):
+        if st.session_state.current_index > 0:
+            st.session_state.current_index -= 1
+
+with col2:
+    current_idx = st.slider(
+        "Navigate candidates:", 
+        min_value=0, 
+        max_value=len(st.session_state.candidates)-1, 
+        value=st.session_state.current_index,
+        key="candidate_slider"
+    )
+    if current_idx != st.session_state.current_index:
+        st.session_state.current_index = current_idx
+
+with col3:
+    if st.button("Next"):
+        if st.session_state.current_index < len(st.session_state.candidates) - 1:
+            st.session_state.current_index += 1
+
+with col4:
+    # Save button
+    if st.button("Save Current Candidate"):
+        save_current_candidate()
+        if st.session_state.current_index < len(st.session_state.candidates) - 1:
+            st.session_state.current_index += 1
+
+# Display and edit current candidate
+if 0 <= st.session_state.current_index < len(st.session_state.candidates):
+    candidate = st.session_state.candidates[st.session_state.current_index]
     
-    # Display and edit current candidate
-    if 0 <= st.session_state.current_index < len(st.session_state.candidates):
-        candidate = st.session_state.candidates[st.session_state.current_index]
-        
-        # Initialize session state variables for the text areas if not present
-        if 'current_instruction' not in st.session_state:
-            st.session_state.current_instruction = candidate.get("instruction", "")
-        if 'current_input' not in st.session_state:
-            st.session_state.current_input = candidate.get("input", "")
-        if 'current_output' not in st.session_state:
-            st.session_state.current_output = candidate.get("output", "")
-        
-        # Update text areas when index changes
-        if st.session_state.current_index != getattr(st, 'last_index', None):
-            st.session_state.current_instruction = candidate.get("instruction", "")
-            st.session_state.current_input = candidate.get("input", "")
-            st.session_state.current_output = candidate.get("output", "")
-            setattr(st, 'last_index', st.session_state.current_index)
-        
-        # Editable text areas
-        st.text_area(
-            "Instruction:",
-            value=st.session_state.current_instruction,
-            height=150,
-            key="instruction_editor"
-        )
-        
-        st.text_area(
-            "Input:",
-            value=st.session_state.current_input,
-            height=150,
-            key="input_editor"
-        )
-        
-        st.text_area(
-            "Output:",
-            value=st.session_state.current_output,
-            height=150,
-            key="output_editor"
-        )
-else:
-    st.info("Generate instruction-input-output tuples to view and edit candidates.")
+    # Initialize session state variables for the text areas if not present
+    if 'current_instruction' not in st.session_state:
+        st.session_state.current_instruction = candidate.get("instruction", "")
+    if 'current_input' not in st.session_state:
+        st.session_state.current_input = candidate.get("input", "")
+    if 'current_output' not in st.session_state:
+        st.session_state.current_output = candidate.get("output", "")
+    
+    # Update text areas when index changes
+    if st.session_state.current_index != getattr(st, 'last_index', None):
+        st.session_state.current_instruction = candidate.get("instruction", "")
+        st.session_state.current_input = candidate.get("input", "")
+        st.session_state.current_output = candidate.get("output", "")
+        setattr(st, 'last_index', st.session_state.current_index)
+    
+    # Editable text areas
+    st.text_area(
+        "Instruction:",
+        value=st.session_state.current_instruction,
+        height=150,
+        key="instruction_editor"
+    )
+    
+    st.text_area(
+        "Input:",
+        value=st.session_state.current_input,
+        height=150,
+        key="input_editor"
+    )
+    
+    st.text_area(
+        "Output:",
+        value=st.session_state.current_output,
+        height=150,
+        key="output_editor"
+    )
 
 # Show saved data
 if st.session_state.saved_data:
