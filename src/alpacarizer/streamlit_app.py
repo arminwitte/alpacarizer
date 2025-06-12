@@ -4,6 +4,66 @@ import os
 from google import genai
 from typing import List, Dict, Any
 import time
+from markitdown import MarkItDown
+import tempfile
+
+
+
+@st.dialog("Process File")
+def process_file(api_key: str):
+
+    # File upload
+    uploaded_files = st.file_uploader("Upload a document", type=["pdf", "docx", "txt"], accept_multiple_files=True)
+
+    def upload_file_to_api(uploaded_files, api_key: str):
+        if uploaded_files:
+            for file in uploaded_files:	
+                # Ensure the file is not empty
+                if file is None or file.size == 0:
+                    st.error("Please upload a valid file.")
+                    return
+                
+                content = file.getvalue()
+                with tempfile.NamedTemporaryFile(
+                    delete=False, suffix=os.path.splitext(file.name)[1]
+                ) as temp_file:
+                    if isinstance(content, str):
+                        temp_file.write(content.encode())
+                    else:
+                        temp_file.write(content)
+                    temp_path = temp_file.name
+
+                try:
+                    md = MarkItDown()
+                    result = md.convert(temp_path)
+                    text = result.text_content
+                finally:
+                    if os.path.exists(temp_path):
+                        os.remove(temp_path)
+
+                candidates = []
+                chunk_size = 8192  # Define chunk size
+                overlap = 512
+                print(f"{file.name}:\nNumber of chunks: {len(text) // chunk_size + 1}")
+                for i in range(0, len(text), chunk_size):
+                    chunk = text[i:i+chunk_size+overlap]
+                    if not chunk.strip():
+                        continue
+                    candidates += generate_candidates(chunk, api_key)
+                    print(f"n candidates: {len(candidates)}, n saved_data: {len(st.session_state.saved_data)}")
+                st.session_state.saved_data += candidates
+                try:
+                    with open(st.session_state.output_file, 'w') as f:
+                        json.dump(st.session_state.saved_data, f, indent=2)
+                    st.success(f"Saved candidate to {st.session_state.output_file}")
+                except Exception as e:
+                    st.error(f"Error saving to file: {str(e)}")
+                        
+
+    st.button("Send to database", use_container_width=True, on_click=upload_file_to_api, args=(uploaded_files,api_key))
+
+
+
 
 # Configure page settings
 st.set_page_config(page_title="Instruction Tuple Generator", layout="wide")
@@ -27,12 +87,13 @@ if 'saved_data' not in st.session_state:
         st.session_state.saved_data = []
 
 def generator_call(prompt: str, api_key: str) -> List[Dict[str, str]]:
-    try:
+    
+    def acquire_candidates(prompt: str, api_key: str) -> List[Dict[str, str]]:
         # Initialize the Gemini client
         client = genai.Client(api_key=api_key)
-    # Generate content with Gemini
+        # Generate content with Gemini
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model= "gemini-1.5-flash", # "gemini-2.5-flash-preview-05-20", # "gemini-2.0-flash",
             contents=prompt,
         )
         
@@ -50,9 +111,15 @@ def generator_call(prompt: str, api_key: str) -> List[Dict[str, str]]:
         candidates = json.loads(json_text)
         return candidates
     
-    except Exception as e:
-        st.error(f"Error generating candidates: {str(e)}")
-        return []
+    candidates = []
+    for _ in range(3):  # Retry up to 3 times
+        try:
+            candidates = acquire_candidates(prompt, api_key)
+            break
+        except Exception as e:
+            st.error(f"Error generating candidates: {str(e)}")
+            time.sleep(5)
+    return candidates
 
 # Function to generate instruction-input-output tuples using Gemini API
 def generate_candidates_input(text: str, api_key: str) -> List[Dict[str, str]]:
@@ -63,7 +130,7 @@ def generate_candidates_input(text: str, api_key: str) -> List[Dict[str, str]]:
     
     {text}
     
-    Generate 5 instruction-input-output tuples in the style of the Alpaca dataset for fine-tuning language models.
+    Generate 10 instruction-input-output tuples in the style of the Alpaca dataset for fine-tuning language models.
     Each tuple should contain an istruction of the following instructions categories
     - summarize, e.g., Provide a concise one-sentence summary of the following text:
     - keyword, e.g., Extract 3-5 main keywords or key phrases from the following text:
@@ -74,6 +141,7 @@ def generate_candidates_input(text: str, api_key: str) -> List[Dict[str, str]]:
     The input should be between 64 and 512 tokens long.
     Format the output as a JSON array with objects containing 'instruction', 'input', and 'output' keys.
     Do not include any explanation or conversation, just return valid JSON that can be parsed.
+    Use German language.
     """
     
     return generator_call(prompt, api_key)
@@ -87,12 +155,13 @@ def generate_candidates_questions(text: str, api_key: str) -> List[Dict[str, str
     
     {text}
     
-    Generate 5 instruction-output tuples in the style of the Alpaca dataset for fine-tuning language models.
+    Generate 10 instruction-output tuples in the style of the Alpaca dataset for fine-tuning language models.
     Each tuple should contain a question as the instruction and the corresponding response as the output.
     The question must be self-contained without referencing the text (e.g "according to the text") and should not require additional context to be answered.
     The output should be a complete and concise answer to the question.
     Format the output as a JSON array with objects containing 'instruction', 'output' keys.
     Do not include any explanation or conversation, just return valid JSON that can be parsed.
+    Use German language.
     """
     
     return generator_call(prompt, api_key)
@@ -100,8 +169,9 @@ def generate_candidates_questions(text: str, api_key: str) -> List[Dict[str, str
 # Function to generate instruction-input-output tuples using Gemini API
 def generate_candidates(text: str, api_key: str) -> List[Dict[str, str]]:
     inputs = generate_candidates_input(text, api_key)
-    time.sleep(1) # Sleep for a second to avoid rate limiting
+    time.sleep(5) # Sleep for 5 seconds to avoid rate limiting
     questions = generate_candidates_questions(text, api_key)
+    time.sleep(5) # Sleep for 5 seconds to avoid rate limiting
     return inputs + questions
 
 # Function to save current candidate to file
@@ -146,6 +216,13 @@ api_key = st.text_input("Enter your Gemini API Key:", type="password")
 output_file = st.text_input("Output JSON file name:", value=st.session_state.output_file)
 if output_file != st.session_state.output_file:
     st.session_state.output_file = output_file
+
+with st.sidebar:
+    button_process_file = st.button(
+        "Process document", use_container_width=True
+    )
+    if button_process_file:
+        process_file(api_key)
 
 # Text input area
 col1, col2 = st.columns([2, 1])
