@@ -95,18 +95,8 @@ First, you will analyze the provided text to identify the core topics and auxili
 Your task is to analyze the following JSON list of alpaca dataset-style instruction/(input)/output pairs. For EACH pair in the list, you must evaluate it against the provided rubric.
 
 **Evaluation Rubric:**
-1.  **Accuracy (Score 1-5, 1 -> incorrect, 3 -> correctness may be doubted, 5 -> correctness can be confirmed):** Is the answer factually correct?
-2.  **Depth (Score 1-5, 1-> simple reproduction of a portion of the text, 5 -> transfer of knowledge neccessary):** How complex is the question? Extracting keywords, summarizing, or paraphrasing should be scored 4. Questions that require synthesis of multiple concepts or deeper understanding should be scored 5. Mere reproduction of a portion of the text should be scored 1.
-3.  **Clarity (Score 1-5):** Are the question and answer well-phrased and self-contained, i.e. all information to answer the question is given in the provided context and the question does not refer to the text itsself (1 -> use of phases like "im vorliegenden Beitrag" or similar if no input key is present or the value of input key is empty)?
-4.  **Relevance (Score 1-5):** Is the question relevant to the content or main theme of the provided text? (1 -> a question about the license of a text, about references or authors, 5 -> a question mentioning the main topic of the provided context)
-
-
-
-
-
-
 1. Accuracy
-    - Core Question: How factually correct is the provided answer when compared only to the source text?
+    - Core Question: Does the output answer the question? How factually correct is the provided answer when compared only to the source text?
     - Score 5: Perfectly Accurate
         - Explanation: The answer is a complete and precise reflection of the information present in the source document. Every fact, figure, and procedural step mentioned is entirely correct.
         - Example:
@@ -197,13 +187,12 @@ Your task is to analyze the following JSON list of alpaca dataset-style instruct
         - Explanation: The question is about a meta-detail of the document itself (e.g., its license, author, formatting) and has no bearing on the principles or procedures of child protection.
         - Example: "Under what license is this document published?"
 
-
-
-
-
-
 **Your Task:**
-Iterate through each object in the "pairs" list. Your output MUST be a single JSON object containing a key "evaluations". This key should hold a list of JSON objects. Each object in your output list must contain the original "id" and your evaluation scores.
+Iterate through each object in the "pairs" list.
+- Your output MUST be a single JSON object containing a key "evaluations".
+- This key should hold a list of JSON objects.
+- Each object in your output list must contain the original "id" and your evaluation scores.
+- In the Input, the 'input' field is optional and may be empty. If it is present, it should be considered as additional context for the question.
 
 **Example Output Structure (Your response must be ONLY this JSON):**
 {{
@@ -221,20 +210,117 @@ To calibrate your judgment, here are some examples of how to score pairs:
 
 **--- Calibration Examples ---**
 
-**Example 1: High Quality, High Relevance**
-* **Input Pair:** {{ "id": 101, "question": "What is the first step a mandated reporter must take if they suspect emotional abuse?", "answer": "According to the protocol on page 12, the first step is to immediately contact the regional child protection hotline and provide a detailed account of their observations without notifying the family first." }}
-* **Your Example Evaluation:**
-    {{ "id": 101, "scores": {{ "accuracy": 5, "depth": 3, "clarity": 5, "relevance": 5 }}, "overall_score": 4.5, "reasoning": "Excellent. The question addresses a critical, high-relevance procedure. The answer is accurate and specific." }}
+Example 1:
+Example input:
+{{
+"instruction": "Generiere einen kurzen, ansprechenden Titel f\u00fcr den folgenden Text:",
+"input": "Hammer, Stephan (2018). Uneinigkeit \u00fcber den weiteren Weg zwischen Familiengericht und Jugendamt. Vortrag im Rahmen der Tagung. Kind im Mittelpunkt? Fachtagung vom 26.\u201327.3.2018\u00a0in Frankfurt  a.  M.  https://www.dijuf.de/files/downloads/2018/2018_03_FT%20Kinderschutz%20Dokumentation/2018_03_27_AG%204_Hammer_Uneinigkeit%20ueber%20den%20weiteren%20\nWeg.pdf (abgerufen am 27.10.2021).",
+"output": "Uneinigkeit: Familiengericht und Jugendamt im Kinderschutz"}}
+Example evaluation:
+{{
+"evaluation": {{
+    "scores": {{
+    "accuracy": 5,
+    "depth": 4,
+    "clarity": 5,
+    "relevance": 1
+    }},
+    "overall_score": 3.75,
+    "reasoning": "Good title, but refers to references which is irrelevant to the main topic."
+}}
+}},
+Example 2:
+Example input:
+{{
+"instruction": "Wer hat 2006 ein Buch \u00fcber Emotionen, Entwicklung und Regulation ver\u00f6ffentlicht?",
+"output": "Friedlmeier hat 2006 ein Buch \u00fcber Emotionen, Entwicklung und Regulation ver\u00f6ffentlicht."}}
+Example evaluation:
+{{
+"evaluation": {{
+    "scores": {{
+    "accuracy": 3,
+    "depth": 1,
+    "clarity": 5,
+    "relevance": 2
+    }},
+    "overall_score": 2.75,
+    "reasoning": "Accuracy is questionable since the book author is Manfred Holodynski, not Friedlmeier (who contributed). Depth is very low. Relevance is limited to citation, not core content."
+}}
+}},
+Example 3:
+Example input:
+{{
+"instruction": "Analysiere die Stimmung des folgenden Textes. Klassifiziere sie als positiv, negativ oder neutral und erl\u00e4utere kurz deine Begr\u00fcndung:",
+"input": "Des Weiteren  ist  auf  den  (zum  Zeitpunkt  der  Entscheidung)  aktuelle",
+"output": "Neutral. Der Text ist unvollst\u00e4ndig und enth\u00e4lt keine Hinweise auf eine positive, negative oder neutrale Stimmung."}}
+Example evaluation:
+{{
+"evaluation": {{
+    "scores": {{
+    "accuracy": 5,
+    "depth": 1,
+    "clarity": 5,
+    "relevance": 2
+    }},
+    "overall_score": 3.25,
+    "reasoning": "Correctly identifies the incomplete text and lack of sentiment. Relevance is questionable due to incompleteness."
+}}
+}},
+Example 4:
+Example input:
+{{
+"instruction": "Was wird im vorliegenden Beitrag unter dem Begriff \"Kindesschutz/Kinderschutz\" verstanden?",
+"output": "Im vorliegenden Beitrag werden mit den Begriffen \u201eKindesschutz/Kinderschutz\u201c staatliche Ma\u00dfnahmen zur Ermittlung und Abwendung von Kindeswohlgef\u00e4hrdungen erfasst. Dies beinhaltet sowohl die Interventionen des Jugendamtes als auch die Anordnungen des Familiengerichts. Es geht also um das staatliche W\u00e4chteramt, das im Artikel 6 Absatz 2 Satz 2 des Grundgesetzes (GG) verankert ist."}}
+Example evaluation:
+{{
+"evaluation": {{
+    "scores": {{
+    "accuracy": 5,
+    "depth": 3,
+    "clarity": 2,
+    "relevance": 5
+    }},
+    "overall_score": 3.75,
+    "reasoning": "Accurate and relevant, but the question uses \"im vorliegenden Beitrag\" which hurts clarity. It relies on the text itself rather than being self-contained."
+}}
+}},
+Example 5:
+Example input:
+{{
+"instruction": "Erl\u00e4utern Sie ausf\u00fchrlich, wie die erfolgreiche Bew\u00e4ltigung von Entwicklungsaufgaben die Entwicklung von Kindern beeinflusst.",
+"output": "Die erfolgreiche Bew\u00e4ltigung von Entwicklungsaufgaben hat weitreichende positive Auswirkungen auf die Entwicklung von Kindern. Wenn Kinder in der Lage sind, die Herausforderungen zu meistern, die in verschiedenen Lebens- und Entwicklungsstadien an sie gestellt werden, erlangen sie nicht nur neue Kompetenzen und Fertigkeiten, sondern st\u00e4rken auch ihr Selbstvertrauen und ihre Resilienz. Diese neu gewonnenen F\u00e4higkeiten erleichtern es ihnen, sich an zuk\u00fcnftige Anforderungen anzupassen und weitere Entwicklungsaufgaben erfolgreich zu bew\u00e4ltigen. Beispielsweise erm\u00f6glicht das erfolgreiche Erlernen des Lesens und Schreibens den Kindern, sich in der Schule besser zurechtzufinden und neue Wissensgebiete zu erschlie\u00dfen. Eine f\u00f6rderliche Umgebung, in der die kindlichen Grundbed\u00fcrfnisse befriedigt werden und gen\u00fcgend Ressourcen zur Verf\u00fcgung stehen, ist hierf\u00fcr essentiell. Die Bew\u00e4ltigung von Entwicklungsaufgaben ist somit nicht nur eine Grundlage f\u00fcr eine positive Entwicklung, sondern auch f\u00fcr die psychische Gesundheit von Kindern. Misslingt die Bew\u00e4ltigung einer Entwicklungsaufgabe, kann dies zu Schwierigkeiten in sp\u00e4teren Entwicklungsphasen f\u00fchren."}}
+Example evaluation:
+{{
+"evaluation": {{
+    "scores": {{
+    "accuracy": 5,
+    "depth": 5,
+    "clarity": 5,
+    "relevance": 5
+    }},
+    "overall_score": 5.0,
+    "reasoning": "The answer provides a comprehensive explanation of how successfully mastering developmental tasks influences child development. It includes examples and links to basic needs, demonstrating depth and relevance. The question is well-phrased, and the answer is accurate and clear."
+}}
+}},
+Example 6:
+Example input:
+{{
+"instruction": "Was sind Beispiele f\u00fcr unangemessene Erziehungsziele?",
+"output": "Unangemessene Erziehungsziele liegen vor, wenn Eltern nicht bereit oder in der Lage sind, gesetzliche oder gesellschaftliche Erwartungen (z. B. Schulbesuch) zu vertreten. Auch wenn ein Kind zu kriminellen Aktivit\u00e4ten oder zum Dulden von sexuellem Missbrauch angehalten wird, gelten die Ziele als unangemessen. Botschaften an das Kind, die als psychische Misshandlung einzustufen sind, z\u00e4hlen ebenfalls dazu."}}
+Example evaluation:
+{{
+"evaluation": {{
+    "scores": {{
+    "accuracy": 5,
+    "depth": 4,
+    "clarity": 5,
+    "relevance": 5
+    }},
+    "overall_score": 4.75,
+    "reasoning": "Correctly provides examples of inappropriate educational goals, citing legal and societal expectations. Requires synthesis of information from earlier text."
+}}
+}},
 
-**Example 2: Accurate but Irrelevant (Your Specific Problem)**
-* **Input Pair:** {{ "id": 102, "question": "Under what license is this document distributed?", "answer": "This document is distributed under the Creative Commons Attribution 4.0 International license." }}
-* **Your Example Evaluation:**
-    {{ "id": 102, "scores": {{ "accuracy": 5, "depth": 1, "clarity": 5, "relevance": 1 }}, "overall_score": 3.0, "reasoning": "While accurate, the question is completely irrelevant to the core mission of child protection. This is a low-value pair as it falls under the specified 'Low-Relevance Topics'." }}
-
-**Example 3: Factually Incorrect**
-* **Input Pair:** {{ "id": 103, "question": "What is the maximum time allowed to file a written report after an oral report?", "answer": "Mandated reporters are given up to 7 days to file a written report." }}
-* **Your Example Evaluation:**
-    {{ "id": 103, "scores": {{ "accuracy": 1, "depth": 2, "clarity": 5, "relevance": 5 }}, "overall_score": 3.25, "reasoning": "The question is highly relevant, but the answer is factually incorrect according to the manual, which specifies a 48-hour limit. This pair is unusable." }}
 
 Now, please process the following batch of pairs with the same level of critical judgment:
 
@@ -283,15 +369,17 @@ Ensure the questions are diverse and cover the following types:
 4.  **Analytical:** A question that asks about the 'why' or 'how' of a situation, theme, or character action described in the text.
 5.  **Hypothetical (Advanced):** A question that asks "What might have happened if..." based on the information in the text.
 
-The answers must be comprehensive, detailed (more than 256 tokens), and solely based on the information within this provided text excerpt. Do not use any outside knowledge.
-The question must be self-contained without referencing the text (i.e. do not use "according to the text" etc.).
+Style:
+- The answers must be comprehensive, detailed (more than 256 tokens), and solely based on the information within this provided text excerpt.
+- Use markdown formatting for the response with proper headings and bullet points where appropriate.
+- Do not use any outside knowledge.
+- The question must be self-contained without referencing the text (i.e. do not use "according to the text" etc.).
+- Format the output as a JSON array with objects containing 'instruction' and 'output' keys, only.
+- Do not include any explanation or conversation, just return valid JSON that can be parsed.
+- Use German language.
 
-Here is the text excerpt:
+Text excerpt:
 {text}
-
-Format the output as a JSON array with objects containing 'instruction' and 'output' keys.
-Do not include any explanation or conversation, just return valid JSON that can be parsed.
-Use German language.
         """
         return self._call_llm(prompt)
 
@@ -305,13 +393,15 @@ Each tuple should contain an istruction of the following instructions categories
 - keyword, e.g., Extract 3-5 main keywords or key phrases from the following text:
 - title, e.g., Generate a short, engaging title for the following text:
 - sentiment, e.g., Analyze the sentiment of the following text. Classify it as positive, negative, or neutral, and briefly explain your reasoning:
-- paraphrase, e.g., Rewrite the following text in your own words, maintaining its core meaning:
+- paraphrase, e.g., Rewrite the following text in your own words, maintaining its core meaning
 the input text for the instruction, and the corresponding response.
-The 'input' should be between 64 and 512 tokens long.
-The 'output' should be a single string, markdown formated, and between 64 and 512 tokens long.
-Format the response as a JSON array with objects containing 'instruction', 'input', and 'output' keys.
-Do not include any explanation or conversation, just return valid JSON that can be parsed.
-Use German language.
+
+Style:
+- The 'input' should be between 64 and 512 tokens long.
+- The 'output' should be a single string, markdown formated, and between 64 and 512 tokens long.
+- Format the response as a JSON array with objects containing 'instruction', 'input', and 'output' keys, only.
+- Do not include any explanation or conversation, just return valid JSON that can be parsed.
+- Use German language.
 
 ** Text: **
 {text}
@@ -326,10 +416,12 @@ Generate 10 instruction-output tuples in the style of the Alpaca dataset for fin
 - 5 tuples should have the questions mention to answer briefly and give complete but concise answers (answers with up to 256 tokens).
 - 5 tuples should be complete and elaborate answers to the questions (answers with more than 256 tokens, markdown formated).
 Each tuple should contain a question as the instruction and the corresponding response as the output.
-The question must be self-contained without referencing the text (e.g "according to the text") and should not require additional context to be answered.
-Format the response as a JSON array with objects containing 'instruction', 'output' keys.
-Do not include any explanation or conversation, just return valid JSON that can be parsed.
-Use German language.
+
+Style:
+- The question must be self-contained without referencing the text (e.g "according to the text") and should not require additional context to be answered.
+- Format the response as a JSON array with objects containing 'instruction', 'output' keys, only.
+- Do not include any explanation or conversation, just return valid JSON that can be parsed.
+- Use German language.
 
 ** Text: **
 {text}
